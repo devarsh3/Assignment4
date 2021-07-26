@@ -31,6 +31,7 @@ sem_t sem_odd;
 
 //declare methods
 int read(char *file);
+void currentResources();
 
 /*
 ------------------------------------------------------------
@@ -172,7 +173,7 @@ for(i=0; i<numberOfCustomers;i++){
 
 
 //command Strings
-char string[MAXINP];
+char str[MAXINP];
 char command[MAXINP];
 char request[MAXINP] = "RQ"; 
 char release[MAXINP] = "RL";
@@ -183,9 +184,145 @@ char exitStr[MAXINP] = "exit\n";
 
 //ask for command
 printf("Enter Command: ");
-fgets(string, MAXINP, stdin);
-strcpy(command, string);
+fgets(str, MAXINP, stdin);
+strcpy(command, str);
 int work = 0;
+
+while(strcmp(command,exitStr)!=0){
+
+    if(work>0){
+        printf("Enter Command: ");
+        fgets(str, sizeof str, stdin);
+        strcpy(command, str);
+    }
+
+    //split
+    int total = 0;
+    for(int x = 0; command[x]!='\0';x++){
+        if(command[x] == ' ' || command[x] == '\n' || command[x] == '\t')
+            total++;
+    }
+
+    char *tokn = strtok(command, " ");
+	char *inputStr[MAXINP];
+
+    i = 0;
+    if(total>=2){
+        while (tokn != NULL && i <= numberOfCustomers){
+            inputStr[i] = tokn;
+			tokn = strtok(NULL, " ");
+			i += 1;
+        }
+    }
+    else{
+        strcpy(inputStr[0], command);
+    }
+
+    int length = i;
+    i=0;
+
+
+
+    //REQUEST RESOURCE========================
+
+    if (strcmp(inputStr[0], request) == 0) {
+        if (atoi (inputStr[1]) >= numberOfCustomers) { // Idiot Proofing the RQ command
+            printf("Allocated index cant be bigger then Maximum No. of Customers\n");
+        }
+
+        else {
+            for (int m = 2; m < (length); m++) // Store requested resource data
+                allocated[atoi(input_str[1])][m-2] = atoi(inputStr[m]); // Convert inputted allocated resource information from string to integer
+
+            printf("Request is satisfied\n");
+        }
+    }
+
+    //RELEASE RESOURCE====================
+
+    else if (strcmp(inputStr[0], release) == 0){
+
+        int quit; // is Requested Release is unsatisfied
+
+        if (atoi (inputStr[1]) >= numberOfCustomers) { // Idiot Proofing the RQ command
+            printf("Allocated index cant be bigger then Maximum No. of Customers\n");
+        }
+        else{
+
+            for (int m = 2; m < (length); m++)
+            {
+                int releaseValue;
+                releaseValue = allocated[atoi(inputStr[1])][m - 2] - atoi(inputStr[m]); //calculate release value
+
+                if (releaseValue < 0) { 
+                    printf("Release is unsatisfied\n");
+                    quit= 1; 
+                    break;
+                }
+                
+                else
+                    allocated[atoi(inputStr[1])][m - 2] = releaseValue;
+
+                if (m = length - 1)
+                    printf("Release is satisfied\n");
+            }
+
+            if (quit == 1)
+                continue;
+        }
+    }
+
+    //Print Details=======================
+
+    else if (strcmp(inputStr[0], newLine) == 0){
+        printf("Showing current state of arrays:\n\n");
+        printf("Currently Available Resources: ");
+        currentResources();
+
+        for (i = 0; i < availableSize; i++)
+            printf("%d ", available[i]);
+        printf("\n\n");
+
+        //max res
+        printf("Maximum Resources: \n");
+			
+        for (i = 0; i < numberOfCustomers; i++) {
+            for (int x = 0; x < availableSize; x++)
+                printf("%d ", maximum[i][x]);
+
+            printf("\n");
+        }
+        printf("\n");
+
+        // display Alloc.Resources
+        printf("Allocated Resources: \n");
+
+        for (i = 0; i < numberOfCustomers; i++) {
+            for (int x = 0; x < availableSize; x++)
+                printf("%d ", allocated[i][x]);
+            
+            printf("\n");
+        }
+        printf("\n");
+
+
+        // Print Needed Resources
+        printf("Needed Resources: \n");
+        
+        needResources(availableSize, numberOfCustomers, allocated, maximum, need);
+
+        for (i = 0; i < numberOfCustomers; i++) {
+            for (int x = 0; x < availableSize; x++)
+                printf("%d ", need[i][x]);
+
+            printf("\n");
+        }
+        printf("\n");
+
+    }
+
+}//end while
+
 
 
 } //end main
@@ -217,4 +354,27 @@ int read(char *file){
     fclose(fileptr); // Close file
 
     return lines;
+}
+
+void currentResources(){
+    int temp1;
+	int temp2;
+
+	for (int m = 0; m < customerTemp->record_size; m++) {
+		temp1 = 0;
+
+		for (int n = 0; n < customerTemp->customers; n++)
+			temp1 = temp1 + allocated[n][m];
+		
+		temp2 = available[m] - temp1;
+		available[m] = temp2;
+	}
+}
+
+void needResources(int size, int customers, int **allocated, int maximum[j][i], int **needed) {
+
+	for (int j = 0; j < customers; j++) {
+		for (int x = 0; x < size; x++)
+			needed[j][x] = maximum[j][x] - allocated[j][x];
+	}
 }
