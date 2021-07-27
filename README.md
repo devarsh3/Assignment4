@@ -20,5 +20,5 @@ Mahek Shah
 The motivation behind this assignment is to apply theortical knowledge taught and apply it into a practical setting. Thus, giving us more hands on expierence when working with different operating systems along with the different concepts required to further strenghten our understanding of the topic in this case the banker's algorithm.
 
 # Features: 
-This algorithm will take into consideration requests from "n" customers for "m" resource types, if requests satisfies algorithm it will print state of the system. Uses the process of allocating resources to obtain safest sequences then to add them onto 2d array.
+This algorithm will take into consideration requests from "n" customers for "m" resource types, if requests satisfies algorithm it will print state of the system. Uses the process of allocating resources to obtain safest sequences then to add them onto 2 dimensional array.
 
