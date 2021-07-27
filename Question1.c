@@ -26,12 +26,14 @@ Customer *customerTemp;
 
 #define MAXINP 200
 
-sem_t sem_even; 
-sem_t sem_odd;
+
 
 //declare methods
-int read(char *file);
+int readFile(char *file);
 void currentResources();
+int bankerAlgo(int p, int q, int **allocated, int maximum[q][p], int availablem[p], int **need, int array[q]);
+void needResources(int size, int customers, int **allocated, int maximum[customers][size], int **needed);
+void *runThread(void *t);
 
 /*
 ------------------------------------------------------------
@@ -46,13 +48,11 @@ if(argc<2)
 		return -1;
 	}
 
-sem_init(&sem_even, 0, 0);
-sem_init(&sem_odd, 0 ,0);
 
 int availableSize = argc - 1;
 
 //get the no. of cutomers from file
-int numberOfCustomers = read("sample4_in.txt") + 1;
+int numberOfCustomers = readFile("sample4_in.txt") + 1;
 printf("Number of Customers: %d\n", numberOfCustomers);
 
 //array initiallization
@@ -89,7 +89,7 @@ for(int j=0; j<numberOfCustomers;j++){
 need = (int **)malloc(numberOfCustomers * sizeof(int *));
 
 for(i = 0; i< numberOfCustomers;i++){
-    needed[i] = (int *)malloc(availableSize * sizeof(int));
+    need[i] = (int *)malloc(availableSize * sizeof(int));
 }
 
 int tempArr[numberOfCustomers];
@@ -139,7 +139,7 @@ while(command!=NULL)
     command = strtok(NULL,"\r\n");
 }
 
-for(int k = 0; k < customers; k++)
+for(int k = 0; k < numberOfCustomers; k++)
 {
     char* token = NULL;
     int x = 0;
@@ -174,36 +174,36 @@ for(i=0; i<numberOfCustomers;i++){
 
 //command Strings
 char str[MAXINP];
-char command[MAXINP];
+char comm[MAXINP];
 char request[MAXINP] = "RQ"; 
 char release[MAXINP] = "RL";
-char newLine[MAXINP] = "\n";
-char run[MAXINP] = "run\n";
+char status[MAXINP] = "Status\n";
+char run[MAXINP] = "Run\n";
 char exitStr[MAXINP] = "exit\n";
 
 
 //ask for command
 printf("Enter Command: ");
 fgets(str, MAXINP, stdin);
-strcpy(command, str);
+strcpy(comm, str);
 int work = 0;
 
-while(strcmp(command,exitStr)!=0){
+while(strcmp(comm,exitStr)!=0){
 
     if(work>0){
         printf("Enter Command: ");
         fgets(str, sizeof str, stdin);
-        strcpy(command, str);
+        strcpy(comm, str);
     }
 
     //split
     int total = 0;
-    for(int x = 0; command[x]!='\0';x++){
-        if(command[x] == ' ' || command[x] == '\n' || command[x] == '\t')
+    for(int x = 0; comm[x]!='\0';x++){
+        if(comm[x] == ' ' || comm[x] == '\n' || comm[x] == '\t')
             total++;
     }
 
-    char *tokn = strtok(command, " ");
+    char *tokn = strtok(comm, " ");
 	char *inputStr[MAXINP];
 
     i = 0;
@@ -215,7 +215,7 @@ while(strcmp(command,exitStr)!=0){
         }
     }
     else{
-        strcpy(inputStr[0], command);
+        strcpy(inputStr[0], comm);
     }
 
     int length = i;
@@ -232,7 +232,7 @@ while(strcmp(command,exitStr)!=0){
 
         else {
             for (int m = 2; m < (length); m++) // Store requested resource data
-                allocated[atoi(input_str[1])][m-2] = atoi(inputStr[m]); // Convert inputted allocated resource information from string to integer
+                allocated[atoi(inputStr[1])][m-2] = atoi(inputStr[m]); // Convert inputted allocated resource information from string to integer
 
             printf("Request is satisfied\n");
         }
@@ -274,9 +274,9 @@ while(strcmp(command,exitStr)!=0){
 
     //Print Details=======================
 
-    else if (strcmp(inputStr[0], newLine) == 0){
-        printf("Showing current state of arrays:\n\n");
-        printf("Currently Available Resources: ");
+    else if (strcmp(inputStr[0], status) == 0){
+
+        printf("Available Resources: ");
         currentResources();
 
         for (i = 0; i < availableSize; i++)
@@ -294,7 +294,7 @@ while(strcmp(command,exitStr)!=0){
         }
         printf("\n");
 
-        // display Alloc.Resources
+        // display Alloc.Resources=========================
         printf("Allocated Resources: \n");
 
         for (i = 0; i < numberOfCustomers; i++) {
@@ -306,7 +306,7 @@ while(strcmp(command,exitStr)!=0){
         printf("\n");
 
 
-        // Print Needed Resources
+        //display Need Resources========================
         printf("Needed Resources: \n");
         
         needResources(availableSize, numberOfCustomers, allocated, maximum, need);
@@ -321,11 +321,77 @@ while(strcmp(command,exitStr)!=0){
 
     }
 
-}//end while
 
 
 
 } //end main
+
+
+
+
+int bankerAlgo(int p, int q, int **allocated, int maximum[q][p], int availablem[p], int **need, int array[q]){
+    int i, j, k;
+    int safety = 1;
+
+    int f[q], ind = 0;
+    for (i = 0; i < q; i++)
+        f[i] = 0;
+
+    int y = 0;
+    for (k = 0; k < p; k++)
+    {
+        for (i = 0; i < q; i++)
+        {
+            if (f[i] == 0)
+            {
+
+                int flag = 0;
+                for (j = 0; j < p; j++)
+                {
+                    if (need[i][j] > available[j])
+                    {
+                        flag = 1;
+                        break;
+                    }
+                }
+
+                if (flag == 0)
+                {
+                    array[ind++] = i;
+
+                    for (y = 0; y < p; y++)
+                        available[y] += allocated[i][y];
+
+                    f[i] = 1;
+                }
+            }
+        }
+    }
+
+    for (k = 0; k < q; k++)
+    {
+        if (f[k] == 0)
+            safety = 0;
+    }
+
+    if (safety == 0)
+        return -1;
+
+    printf("Safe Sequence is: <");
+
+    for (k = 0; k < q - 1; k++)
+        printf("%d ", array[k]);
+
+    printf("%d>\n", array[q - 1]);
+
+    return 0;
+}
+
+
+
+
+
+
 
 
 /*
@@ -334,7 +400,7 @@ Method to count the number of customers from file
 ----------------------------------------------------------------
 */
 
-int read(char *file){
+int readFile(char *file){
     FILE *fileptr;
     int lines = 0;
     char x;
@@ -371,10 +437,14 @@ void currentResources(){
 	}
 }
 
-void needResources(int size, int customers, int **allocated, int maximum[j][i], int **needed) {
+void needResources(int size, int customers, int **allocated, int maximum[customers][size], int **needed) {
 
 	for (int j = 0; j < customers; j++) {
 		for (int x = 0; x < size; x++)
 			needed[j][x] = maximum[j][x] - allocated[j][x];
 	}
 }
+
+
+
+ 
