@@ -16,7 +16,7 @@ Mahek Shah
 - Run the '$ gcc -o Question1 Question1.c -lpthread' command to compile the file
 - Run the '$ ./Question1 10 5 7 8' command to run the compiled file
 
-# Motivation:
+# Motivation: 
 The motivation behind this assignment is to apply theortical knowledge taught and apply it into a practical setting. Thus, giving us more hands on expierence when working with different operating systems along with the different concepts required to further strenghten our understanding of the topic in this case the banker's algorithm.
 
 # Features:
