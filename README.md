@@ -1,4 +1,4 @@
-## Assignment4 - Banker's Algorithm
+## Assignment 4 - Banker's Algorithm
 
 # Project Title:
 Banker's Algorithm - CP 386 A4
