@@ -22,3 +22,14 @@ The motivation behind this assignment is to apply theortical knowledge taught an
 # Features: 
 This algorithm will take into consideration requests from "n" customers for "m" resource types, if requests satisfies algorithm it will print state of the system. Uses the process of allocating resources to obtain safest sequences then to add them onto 2 dimensional array.
 
+# Screenshots:
+
+# Individual Contribution:
+
+# Test Cases:
+
+# About Developers:
+
+# Credits:
+
+# License: 
