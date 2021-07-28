@@ -2,8 +2,6 @@
 Authors:
 Devarsh Patwa - 190417940
 Mahek Shah - 190734000
-
-helllo this is test
 */
 
 #include <unistd.h>
@@ -236,7 +234,7 @@ while(strcmp(comm,exitStr)!=0){
             for (int m = 2; m < (length); m++) // Store requested resource data
                 allocated[atoi(inputStr[1])][m-2] = atoi(inputStr[m]); // Convert inputted allocated resource information from string to integer
 
-            printf("Request is satisfied\n");
+            printf("State is safe, and request is satisfied\n");
         }
     }
 
@@ -266,7 +264,7 @@ while(strcmp(comm,exitStr)!=0){
                     allocated[atoi(inputStr[1])][m - 2] = releaseValue;
 
                 if (m = length - 1)
-                    printf("Release is satisfied\n");
+                    printf("The resources have been released successfully\n");
             }
 
             if (quit == 1)
@@ -324,6 +322,38 @@ while(strcmp(comm,exitStr)!=0){
     }
 
 
+    //Run command===================
+    else if (strcmp(inputStr[0], run) == 0) {
+        
+        needResources(availableSize, numberOfCustomers, allocated, maximum, need);
+        int res = bankerAlgo(availableSize, numberOfCustomers, allocated, maximum, available, need, tempArr);
+        
+        if (res != 0) {
+            printf("Safe sequence not found... :(\n");
+            return -1;
+        }
+
+        for (int x = 0; x < numberOfCustomers; x++) {
+            int index = tempArr[x];
+            printf("-->\tCustomer/Thread %d\n", index);
+            
+            // Running the thread
+            pthread_t tid;
+            pthread_create(&tid, NULL, runThread, &index);
+            pthread_join(tid, NULL);
+        }
+    }
+    
+    work += 1;
+
+}//end while
+
+//free
+free(available);
+free(allocated);
+free(need);
+ 
+return 0;
 
 
 } //end main
@@ -447,6 +477,7 @@ void needResources(int size, int customers, int **allocated, int maximum[custome
 	}
 }
 
+
 void *runThread(void *t){
 
     int *person = (int *)t;
@@ -486,6 +517,3 @@ void *runThread(void *t){
 	return NULL;
 
 }
-
-
- 
