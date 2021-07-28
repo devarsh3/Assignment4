@@ -447,6 +447,45 @@ void needResources(int size, int customers, int **allocated, int maximum[custome
 	}
 }
 
+void *runThread(void *t){
+
+    int *person = (int *)t;
+
+    printf("\tAllocated Resources:\t");
+    for(int x = 0; x<customerTemp->record_size; x++)
+        printf("%d ", allocated[*person][x]);
+    printf("\n");
+
+    printf("\tNeeded:\t");
+    for (int x=0; x< customerTemp->record_size; x++){
+        printf("%d ", need[*person][x]);
+    }
+    printf("\n");
+
+    printf("\tAvailable:\t");
+    for (int x=0; x< customerTemp->record_size; x++){
+        printf("%d ", available[x]);
+    }
+    printf("\n");
+
+    printf("\tThread has started\n");
+    printf("\tThread has finished\n");
+    printf("\tThread is realeasing resources\n");
+    
+
+	printf("\tNew Available:\t");
+
+    for (int x=0; x< customerTemp->record_size; x++){
+        available[x] =  available[x] + allocated[*person][x];
+        printf("%d ", available[x]);
+    }
+
+
+    printf("\n");
+	
+	return NULL;
+
+}
 
 
  
