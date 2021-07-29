@@ -10,7 +10,7 @@ Mahek Shah - 190734000
 #include <string.h>
 #include <sys/stat.h>
 #include <pthread.h>
-#include <semaphore.h>
+
 
 //customer structure to keep things organized
 typedef struct customer {
