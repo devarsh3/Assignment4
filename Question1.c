@@ -60,9 +60,14 @@ customerTemp = (Customer*)malloc(sizeof(Customer));
 customerTemp->record_size = availableSize;
 customerTemp->customers = numberOfCustomers;
 
+//allocation of  2d array
 available = (int*)malloc(availableSize * sizeof(int));
+	
+// conditional statement if == to Null THEN	
 if (available == NULL){
+	// formatted print message 
     printf("MALLOC ERROR\n");
+	//returns-1
     return -1;
 }
 
@@ -88,10 +93,12 @@ for(int j=0; j<numberOfCustomers;j++){
 //need 2d array
 need = (int **)malloc(numberOfCustomers * sizeof(int *));
 
+//for loop to iterate through array 
 for(i = 0; i< numberOfCustomers;i++){
     need[i] = (int *)malloc(availableSize * sizeof(int));
 }
 
+//initializing array 
 int tempArr[numberOfCustomers];
 
 int maximum[numberOfCustomers][availableSize];
@@ -103,10 +110,14 @@ for(int j=0; j<numberOfCustomers;j++){
     }
 }
 
+//open file to read contents from txr 
 FILE *input = fopen("sample4_in.txt", "r");
 
+//conditional statement doesnt equal to it 
 if(!input){
+	// formatted print 
     printf("FILE ERROR");
+	//returns -1
     return -1;
 }
 
@@ -138,23 +149,25 @@ while(command!=NULL)
     i++;
     command = strtok(NULL,"\r\n");
 }
-
+// for loop for iteration 
 for(int k = 0; k < numberOfCustomers; k++)
 {
+    //initiaizng varables setting them equal to null and - 
     char* token = NULL;
     int x = 0;
     token =  strtok(lines[k],",");
 
+    //while iterates as long as token is not empty 
     while(token!=NULL)
     {
         maximum[k][x] = atoi(token);
+	//increment 
         x++;
         token = strtok(NULL,",");
     }
 }
 
 //print available Res
-
 printf("Currently Available resources:");
 for(i=0; i<availableSize;i++)
     printf(" %d", available[i]);
@@ -186,11 +199,16 @@ char exitStr[MAXINP] = "exit\n";
 printf("Enter Command: ");
 fgets(str, MAXINP, stdin);
 strcpy(comm, str);
+	
+//initializinf variable work = to0 
 int work = 0;
 
+//while loop checking parameter doesnt = to 0 
 while(strcmp(comm,exitStr)!=0){
 
+    // conditional statement checking work >0 
     if(work>0){
+	// prints if work >0
         printf("Enter Command: ");
         fgets(str, sizeof str, stdin);
         strcpy(comm, str);
@@ -198,19 +216,27 @@ while(strcmp(comm,exitStr)!=0){
 
     //split
     int total = 0;
+    //for loop to iterate through 
     for(int x = 0; comm[x]!='\0';x++){
+	// checking if com has certain conditiosn in them 
         if(comm[x] == ' ' || comm[x] == '\n' || comm[x] == '\t')
+	    //increment 
             total++;
     }
 
     char *tokn = strtok(comm, " ");
 	char *inputStr[MAXINP];
 
+    // intialize and set amount eqaul to 
     i = 0;
+    
+    // conditional statement checking total is always great or = to 2 to pass the next step 
     if(total>=2){
         while (tokn != NULL && i <= numberOfCustomers){
+	   //if input at index i = to req tokn
             inputStr[i] = tokn;
 			tokn = strtok(NULL, " ");
+			//increment i at end next index
 			i += 1;
         }
     }
@@ -417,14 +443,6 @@ int bankerAlgo(int p, int q, int **allocated, int maximum[q][p], int availablem[
     printf("%d>\n", array[q - 1]);
 
     return 0;
-}
-
-
-
-
-
-
-
 
 /*
 ----------------------------------------------------------------
@@ -432,17 +450,24 @@ Method to count the number of customers from file
 ----------------------------------------------------------------
 */
 
+//read file function 
 int readFile(char *file){
+    //connecting file 
     FILE *fileptr;
+    // initalizing variable = to 0 
     int lines = 0;
     char x;
  
+    // open file to read 
     fileptr = fopen(file, "r");
 
+    //get data from file 
     x = getc(fileptr); 
     
+    // while loop iteartes onlywhen it doenst = to parameter
 	while (x != EOF)
     {
+	// if statemetn check if its empty/ white space incremet if it is 
         if (x == '\n')
             lines++;
 
@@ -451,28 +476,38 @@ int readFile(char *file){
 
     fclose(fileptr); // Close file
 
+// returns lines 
     return lines;
 }
 
 void currentResources(){
+    //intializing variables 
     int temp1;
 	int temp2;
 
+	//for loop to iterate setting a range for m 
 	for (int m = 0; m < customerTemp->record_size; m++) {
+		//var is = 0 
 		temp1 = 0;
-
+		
+		//for loop to iterate setting a range for n
 		for (int n = 0; n < customerTemp->customers; n++)
+			//array allocations and n and m indexes and is incremented
 			temp1 = temp1 + allocated[n][m];
 		
+		//array allocations and n and m indexes and is decremented one less of it 
 		temp2 = available[m] - temp1;
 		available[m] = temp2;
 	}
 }
 
 void needResources(int size, int customers, int **allocated, int maximum[customers][size], int **needed) {
-
+	//for loop to iterate setting a range for j
 	for (int j = 0; j < customers; j++) {
+		//for loop to iterate setting a range for x
+		// double for loop 
 		for (int x = 0; x < size; x++)
+			//array allocation at indexes j and x and setting req aray equal to it 
 			needed[j][x] = maximum[j][x] - allocated[j][x];
 	}
 }
