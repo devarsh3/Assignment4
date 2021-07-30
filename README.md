@@ -33,6 +33,11 @@ Both of us took the time to actively zoom call over the course of this assignmen
 
 # Test Cases:
 
+Possible Test that was used:
+
+Customer/ thread 0 was requestes the resources (1,0,0,1), screen shot of possibe test cases shown below. Picture was retrieved from CP 386 A4 assignment PDF. <img width="337" alt="Screen Shot 2021-07-30 at 6 01 25 PM" src="https://user-images.githubusercontent.com/75551489/127715836-daf82b51-4bc7-4a1e-adb9-e844d5c216d3.png">
+
+
 # About Developers:
 Mahek Shah (190734000): 3rd year Computer Science student at Wilfrid Laurier University 
 
