@@ -443,6 +443,7 @@ int bankerAlgo(int p, int q, int **allocated, int maximum[q][p], int availablem[
     printf("%d>\n", array[q - 1]);
 
     return 0;
+}
 
 /*
 ----------------------------------------------------------------
