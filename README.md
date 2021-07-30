@@ -29,9 +29,14 @@ This algorithm will take into consideration requests from "n" customers for "m" 
 
 # Individual Contribution:
 
+Both of us took the time to actively zoom call over the course of this assignment. We decided to split off some of the work, Devarsh decided to work on the Banker's Algorithm individually and I, Mahek decided to work on the runthread function. The rest of the functions along with the README file were done together during the zoom call over the course of the week. 
+
 # Test Cases:
 
 # About Developers:
+Mahek Shah (190734000): 3rd year Computer Science student at Wilfrid Laurier University 
+
+Devarsh Patwa (190417940): 3rd year Computer Science student at Wilfrid Laurier University 
 
 # Credits:
 
