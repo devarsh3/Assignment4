@@ -483,6 +483,7 @@ int readFile(char *file){
 void currentResources(){
     //intializing variables 
     int temp1;
+	//intializing variables 
 	int temp2;
 
 	//for loop to iterate setting a range for m 
@@ -515,25 +516,40 @@ void needResources(int size, int customers, int **allocated, int maximum[custome
 
 void *runThread(void *t){
 
+    // initializing 
     int *person = (int *)t;
 
+    //print statement indent tab
     printf("\tAllocated Resources:\t");
+    
+    //for loop to iterate through with range for x 
     for(int x = 0; x<customerTemp->record_size; x++)
+	//prints the array 
         printf("%d ", allocated[*person][x]);
+    //print new line 
     printf("\n");
 
+    //print statement indent tab
     printf("\tNeeded:\t");
+    //for loop to iterate through with range for x 
     for (int x=0; x< customerTemp->record_size; x++){
+	//prints the array 
         printf("%d ", need[*person][x]);
     }
+    //print new line 
     printf("\n");
 
+    //print statement indent tab
     printf("\tAvailable:\t");
+    //for loop to iterate through with range for x 
     for (int x=0; x< customerTemp->record_size; x++){
+	//prints the array 
         printf("%d ", available[x]);
     }
+    //print new line 
     printf("\n");
 
+   //required print statemnts end with a new line 
     printf("\tThread has started\n");
     printf("\tThread has finished\n");
     printf("\tThread is realeasing resources\n");
@@ -541,14 +557,18 @@ void *runThread(void *t){
 
 	printf("\tNew Available:\t");
 
+    // for loop to iterate through the array range of x 
     for (int x=0; x< customerTemp->record_size; x++){
+	//array indeexes and allocation of locations and setting equal to it 
         available[x] =  available[x] + allocated[*person][x];
+	//prints 
         printf("%d ", available[x]);
     }
 
-
+    //prints new line 
     printf("\n");
 	
+	//returns null 
 	return NULL;
 
 }
