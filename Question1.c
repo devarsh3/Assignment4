@@ -2,6 +2,11 @@
 Authors:
 Devarsh Patwa - 190417940
 Mahek Shah - 190734000
+
+Github:
+Devarsh Patwa - devarsh3
+Mahek SHah - mahekshah28
+Repository - https://github.com/devarsh3/Assignment4
 */
 
 #include <unistd.h>
